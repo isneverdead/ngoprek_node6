@@ -1,43 +1,64 @@
-import { barangModel } from "../../models";
+import { barangModel } from '../../models';
 
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-const db = require("../../models");
+const db = require('../../models');
 const sequelize = require('sequelize');
 const BarangModel = db.barangModel;
 export default async function handler(req, res) {
-
-    if(req.method == "POST"){
-
-      await barangModel.create({
-          name: req.body.name,
-          // qty: 1
-          qty: req.body.qty
-      }).then(result => {
+  if (req.method == 'POST') {
+    await barangModel
+      .create({
+        name: req.body.name,
+        // qty: 1
+        qty: req.body.qty,
+      })
+      .then((result) => {
         res.status(200).json({
-          message: "Success",
-          data: result
-          })
-          }).catch(err => {
-              
-              res.status(500).json({
-                  message: "Failed",
-                  data: err
-                  })
-                  });
-    } else if (req.method == "GET") {
-      await barangModel.findAll().then(result => {
+          message: 'Success',
+          data: result,
+        });
+      })
+      .catch((err) => {
+        res.status(500).json({
+          message: 'Failed',
+          data: err,
+        });
+      });
+  } else if (req.method == 'GET') {
+    await barangModel
+      .findAll()
+      .then((result) => {
         res.status(200).json({
-          message: "Success",
-          data: result
-          })
-          }).catch(err => {
-              
-              res.status(500).json({
-                  message: "Failed",
-                  data: err
-                  })
-                  });
-    }
+          message: 'Success',
+          data: result,
+        });
+      })
+      .catch((err) => {
+        res.status(500).json({
+          message: 'Failed',
+          data: err,
+        });
+      });
+  } else if (req.method == 'DELETE') {
+    await barangModel
+      .destroy({
+        where: {
+          id: req.body.id,
+        },
+      })
+      .then((result) => {
+        res.status(200).json({
+          message: 'Berhasil menghapus data',
+          data: result,
+        });
+      })
+      .catch((err) => {
+        res.status(500).json({
+          message: 'Failed',
+          data: err,
+        });
+      });
+  }
 
   // res.status(200).json({ name: 'John Doe' })
 }
